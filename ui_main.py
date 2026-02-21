@@ -28,6 +28,12 @@ class MindustryLauncher:
 
         self.create_widgets()
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
+    
+    def load_language(self):
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        lang_path = os.path.join(script_dir, "language.json")
+        with open(lang_path, "r", encoding="utf-8") as f:
+                return json.load(f)
 
     def load_settings(self):
         if os.path.exists("settings.json"):
@@ -51,33 +57,35 @@ class MindustryLauncher:
         top_frame = tk.Frame(main_frame, bg="#9e95f1")
         top_frame.pack(fill=tk.X, pady=(0,10))
 
-        self.start_btn = create_gradient_button(top_frame, text="启动服务器",
+        lgag = self.load_language()
+
+        self.start_btn = create_gradient_button(top_frame, text=lgag["language"][lgag["user_choice"]]["start_server"],
                                                 command=self.start_server,
                                                 width=120, height=35)
         self.start_btn.pack(side=tk.LEFT, padx=5)
 
-        self.stop_btn = create_gradient_button(top_frame, text="停止服务器",
+        self.stop_btn = create_gradient_button(top_frame, text=lgag["language"][lgag["user_choice"]]["stop_server"],
                                                command=self.stop_server,
                                                width=120, height=35)
         self.stop_btn.pack(side=tk.LEFT, padx=5)
         self.stop_btn.config(state=tk.DISABLED)
 
-        self.setting_btn = create_gradient_button(top_frame, text="设置",
+        self.setting_btn = create_gradient_button(top_frame, text=lgag["language"][lgag["user_choice"]]["setting"],
                                                   command=self.open_settings,
                                                   width=120, height=35)
         self.setting_btn.pack(side=tk.LEFT, padx=5)
 
-        self.map_list_btn = create_gradient_button(top_frame, text="地图列表",
+        self.map_list_btn = create_gradient_button(top_frame, text=lgag["language"][lgag["user_choice"]]["map_list"],
                                                    command=self.show_map_list,
                                                    width=120, height=35)
         self.map_list_btn.pack(side=tk.LEFT, padx=5)
 
-        self.game_stop_btn = create_gradient_button(top_frame, text="暂停游戏",
+        self.game_stop_btn = create_gradient_button(top_frame, text=lgag["language"][lgag["user_choice"]]["stop_game"],
                                                    command=self.stop_game,
                                                    width=120, height=35)
         self.game_stop_btn.pack(side=tk.LEFT, padx=5)
 
-        self.game_start_btn = create_gradient_button(top_frame, text="开始游戏",
+        self.game_start_btn = create_gradient_button(top_frame, text=lgag["language"][lgag["user_choice"]]["start_game"],
                                                    command=self.start_game,
                                                    width=120, height=35)
         self.game_start_btn.pack(side=tk.LEFT, padx=5)
@@ -89,9 +97,9 @@ class MindustryLauncher:
         self.cmd_entry = tk.Entry(cmd_frame, font=('微软雅黑', 10),bg="#c1dcfc")
         self.cmd_entry.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0,5))
 
-        self.send_btn = create_gradient_button(cmd_frame, text="键入指令",
+        self.send_btn = create_gradient_button(cmd_frame, text=lgag["language"][lgag["user_choice"]]["enter_command"],
                                                command=self.send_command,
-                                               width=80, height=30)
+                                               width=100, height=30)
         self.send_btn.pack(side=tk.LEFT)
 
         # 输出区域

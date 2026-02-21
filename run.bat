@@ -1,0 +1,1 @@
+C:\Apps\coding\python313\python.exe main.py

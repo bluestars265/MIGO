@@ -1,0 +1,34 @@
+{
+    "user_choice": "en",
+    "language": {
+        "cn_zh": {
+            "start_server": "启动服务器",
+            "stop_server": "停止服务器",
+            "setting": "设置",
+            "map_list": "地图列表",
+            "stop_game": "暂停游戏",
+            "start_game": "开始游戏",
+			"enter_command":"键入指令",
+			"java_exe_path":"Java路径（exe）",
+			"server_jar_path":"服务器jar路径",
+			"apply":"确定",
+			"close":"关闭"
+			
+			
+        },
+        "en": {
+            "start_server": "start server",
+            "stop_server": "stop server",
+            "setting": "setting",
+            "map_list": "map list",
+            "stop_game": "stop game",
+            "start_game": "start game",
+			"enter_command":"enter command",
+			"java_exe_path":"java.exe path",
+			"server_jar_path":"server jar path",
+			"apply":"apply",
+			"close":"close"
+			
+        }
+    }
+}
