@@ -8,6 +8,10 @@ import map_list
 from button_style2 import create_gradient_button
 from server_controller import ServerController
 
+# 获取脚本所在目录，用于构建绝对路径
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+SETTINGS_PATH = os.path.join(SCRIPT_DIR, "settings.json")
+
 class MindustryLauncher:
     def __init__(self, root):
         self.root = root
@@ -28,33 +32,51 @@ class MindustryLauncher:
 
         self.create_widgets()
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
-    
+
     def load_language(self):
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        lang_path = os.path.join(script_dir, "language.json")
+        lang_path = os.path.join(SCRIPT_DIR, "language.json")
         with open(lang_path, "r", encoding="utf-8") as f:
-                return json.load(f)
+            return json.load(f)
 
     def load_settings(self):
-        if os.path.exists("settings.json"):
-            with open("settings.json", "r") as f:
-                return json.load(f)
-        return {"java_path": "", "jar_path": ""}
+        """加载设置，若文件不存在则返回默认配置"""
+        default_settings = {
+            "java": {"java_path": "", "jar_path": ""},
+            "color": {
+                "windows_bg": "#9e95f1",
+                "entry": "#9ec3f6",
+                "terminal": "#272f38",
+                "text": "#9ec3f6",
+                "top_frame_bg": "#9ec3f6"   # 补充缺失的键，避免 KeyError
+            }
+        }
+        if os.path.exists(SETTINGS_PATH):
+            try:
+                with open(SETTINGS_PATH, "r", encoding="utf-8") as f:
+                    return json.load(f)
+            except Exception as e:
+                print(f"加载 settings.json 失败: {e}，使用默认配置")
+        return default_settings
 
     def save_settings(self):
-        with open("settings.json", "w") as f:
-            json.dump(self.settings, f)
+        """保存设置到文件"""
+        try:
+            with open(SETTINGS_PATH, "w", encoding="utf-8") as f:
+                json.dump(self.settings, f, indent=2, ensure_ascii=False)
+        except Exception as e:
+            print(f"保存 settings.json 失败: {e}")
 
     def update_status(self, text):
         self.status_var.set(text)
 
     def create_widgets(self):
         # 主容器
-        main_frame = tk.Frame(self.root, bg="#9e95f1", padx=10, pady=10)
+        main_frame = tk.Frame(self.root, bg=self.settings["color"]["windows_bg"], padx=10, pady=10)
         main_frame.pack(fill=tk.BOTH, expand=True)
 
-        # 顶部按钮区域
-        top_frame = tk.Frame(main_frame, bg="#9e95f1")
+        # 顶部按钮区域（使用 get 提供默认值，防止键缺失）
+        top_frame_bg = self.settings["color"].get("windows_bg", "#9ec3f6")
+        top_frame = tk.Frame(main_frame, bg=top_frame_bg)
         top_frame.pack(fill=tk.X, pady=(0,10))
 
         lgag = self.load_language()
@@ -91,10 +113,10 @@ class MindustryLauncher:
         self.game_start_btn.pack(side=tk.LEFT, padx=5)
 
         # 指令输入区域
-        cmd_frame = tk.Frame(main_frame, bg="#9ec3f6")
+        cmd_frame = tk.Frame(main_frame, bg=self.settings["color"].get("entry", "#9ec3f6"))
         cmd_frame.pack(fill=tk.X, pady=5)
 
-        self.cmd_entry = tk.Entry(cmd_frame, font=('微软雅黑', 10),bg="#c1dcfc")
+        self.cmd_entry = tk.Entry(cmd_frame, font=('微软雅黑', 10), bg=self.settings["color"].get("entry", "#c1dcfc"))
         self.cmd_entry.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0,5))
 
         self.send_btn = create_gradient_button(cmd_frame, text=lgag["language"][lgag["user_choice"]]["enter_command"],
@@ -108,7 +130,7 @@ class MindustryLauncher:
 
         self.output_area = scrolledtext.ScrolledText(
             output_frame, wrap=tk.WORD,
-            font=('Consolas', 10), background='#1e1e1e', foreground='#9cc5f8',
+            font=('Consolas', 10), background=self.settings["color"].get("terminal", "#1e1e1e"), foreground=self.settings["color"].get("text", "#9cc5f8"),
             insertbackground='white', borderwidth=1, relief=tk.SUNKEN
         )
         self.output_area.pack(fill=tk.BOTH, expand=True)
@@ -117,7 +139,7 @@ class MindustryLauncher:
         self.status_var = tk.StringVar()
         self.status_var.set("就绪")
         status_bar = tk.Label(main_frame, textvariable=self.status_var,
-                              relief=tk.SUNKEN, anchor=tk.W, bg="#9cc5f8")
+                              relief=tk.SUNKEN, anchor=tk.W, bg=self.settings["color"].get("windows_bg", "#9cc5f8"))
         status_bar.pack(fill=tk.X, pady=(5,0))
 
     def open_settings(self):
@@ -133,8 +155,8 @@ class MindustryLauncher:
                                self.controller.remove_listener)
 
     def start_server(self):
-        java = self.settings.get("java_path") or "java"
-        jar = self.settings.get("jar_path")
+        java = self.settings["java"].get("java_path") or "java"
+        jar = self.settings["java"].get("jar_path")
         if not jar:
             self.append_output("错误：未设置服务器jar路径\n")
             return

@@ -3,22 +3,28 @@ import tkinter as tk
 from tkinter import messagebox
 import re
 from button_style2 import create_gradient_button  # 导入样式按钮
-
+import os
+import json
 def show_map_list(main_window, process, send_cmd, add_listener, remove_listener):
-    win = tk.Toplevel(main_window.root, bg="#9e95f1")
+    SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+    SETTINGS_PATH = os.path.join(SCRIPT_DIR, "settings.json")
+    with open(SETTINGS_PATH, "r", encoding="utf-8") as f:
+        settings = json.load(f)
+
+    win = tk.Toplevel(main_window.root, bg=settings["color"]["windows_bg"])
     win.title("地图列表")
     win.geometry("400x400")
     win.transient(main_window.root)
     win.grab_set()
 
     # 提示标签：水平填充以消除左侧白边
-    label = tk.Label(win, text="正在获取地图列表...", bg="#9e95f1", font=('微软雅黑', 12))
+    label = tk.Label(win, text="正在获取地图列表...", bg=settings["color"]["windows_bg"], font=('微软雅黑', 12))
     label.pack(pady=5, fill='x')
 
     # 带滚动条的 Canvas，背景色与窗口一致
-    canvas = tk.Canvas(win, borderwidth=0, bg="#9e95f1")
-    scrollbar = tk.Scrollbar(win, orient="vertical", command=canvas.yview, bg="#9e95f1")
-    scrollable_frame = tk.Frame(canvas, bg="#9e95f1")
+    canvas = tk.Canvas(win, borderwidth=0, bg=settings["color"]["windows_bg"])
+    scrollbar = tk.Scrollbar(win, orient="vertical", command=canvas.yview, bg=settings["color"]["windows_bg"])
+    scrollable_frame = tk.Frame(canvas, bg=settings["color"]["windows_bg"])
 
     scrollable_frame.bind(
         "<Configure>",
@@ -71,16 +77,16 @@ def show_map_list(main_window, process, send_cmd, add_listener, remove_listener)
         for widget in scrollable_frame.winfo_children():
             widget.destroy()
         for name in map_names:
-            frame = tk.Frame(scrollable_frame, bg="#9ec3f6")
+            frame = tk.Frame(scrollable_frame, bg=settings["color"]["entry"])
             frame.pack(fill=tk.X, padx=0, pady=2)
 
             # 地图名标签：去掉固定宽度，填充剩余空间
-            lbl = tk.Label(frame, text=name, anchor="w", bg="#9ec3f6")
+            lbl = tk.Label(frame, text=name, anchor="w", bg=settings["color"]["entry"], padx=5)
             lbl.pack(side=tk.LEFT, fill='x', expand=True, padx=(0, 10))
 
             # 按钮宽度固定
             btn = create_gradient_button(frame, text="切换", command=lambda n=name: switch_map(n), width=60, height=25)
-            btn.pack(side=tk.RIGHT)
+            btn.pack(side=tk.RIGHT, padx=5)
 
     def switch_map(map_name):
         send_cmd(f"nextmap {map_name}")

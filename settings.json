@@ -1,1 +1,12 @@
-{"java_path": "C:\\Apps\\coding\\Zulu\\bin\\java.exe", "jar_path": "C:\\Users\\26529\\Documents\\MDT\\mdt_be.jar"}
+{
+  "java": {
+    "java_path": "C:\\Apps\\coding\\Zulu\\bin\\java.exe",
+    "jar_path": "C:\\Users\\26529\\Documents\\MDT\\mdt_be.jar"
+  },
+  "color": {
+    "windows_bg": "#5dbcc8",
+    "entry": "#3d7980",
+    "terminal": "#549ea8",
+    "text": "#49254d"
+  }
+}

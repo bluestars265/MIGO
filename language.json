@@ -12,7 +12,11 @@
 			"java_exe_path":"Java路径（exe）",
 			"server_jar_path":"服务器jar路径",
 			"apply":"确定",
-			"close":"关闭"
+			"close":"关闭",
+			"windows_bg_color":"窗口背景色",
+			"terminal_bg_color":"终端背景色",
+			"terminal_font_color":"终端字体颜色",
+			"entry_color":"输入框颜色"
 			
 			
         },
@@ -27,7 +31,11 @@
 			"java_exe_path":"java.exe path",
 			"server_jar_path":"server jar path",
 			"apply":"apply",
-			"close":"close"
+			"close":"close",
+			"windows_bg_color":"windows background color",
+			"terminal_bg_color":"terminal background color",
+			"terminal_font_color":"terminal font color",
+			"entry_color":"input box color"
 			
         }
     }
