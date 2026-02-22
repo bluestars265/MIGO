@@ -1,0 +1,1 @@
+C:\Apps\coding\python313\python.exe -m PyInstaller --onefile --noconsole --icon=icon.ico main.py

@@ -8,9 +8,28 @@ import map_list
 from button_style2 import create_gradient_button
 from server_controller import ServerController
 
-# 获取脚本所在目录，用于构建绝对路径
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-SETTINGS_PATH = os.path.join(SCRIPT_DIR, "settings.json")
+try:# 获取脚本所在目录，用于构建绝对路径
+    SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+    SETTINGS_PATH = os.path.join(SCRIPT_DIR, "settings.json")
+    
+except:
+    with open("settings.json", "w", encoding="utf-8") as f:
+        json.dump({
+  "java": {
+    "java_path": "C:\\Apps\\coding\\Zulu\\bin\\java.exe",
+    "jar_path": "C:\\Users\\26529\\Documents\\MDT\\mdt_be.jar"
+  },
+  "color": {
+    "windows_bg": "#5dbcc8",
+    "entry": "#3d7980",
+    "terminal": "#549ea8",
+    "text": "#49254d"
+  }
+}, f)
+
+LANGUAGE_PATH = os.path.join(SCRIPT_DIR, "language.json")
+
+
 
 class MindustryLauncher:
     def __init__(self, root):
@@ -34,29 +53,78 @@ class MindustryLauncher:
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
 
     def load_language(self):
-        lang_path = os.path.join(SCRIPT_DIR, "language.json")
-        with open(lang_path, "r", encoding="utf-8") as f:
-            return json.load(f)
+        try:
+            with open(LANGUAGE_PATH, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except:
+            with open(LANGUAGE_PATH, "w", encoding="utf-8") as f:
+                json.dump({
+    "user_choice": "en",
+    "language": {
+        "cn_zh": {
+            "start_server": "启动服务器",
+            "stop_server": "停止服务器",
+            "setting": "设置",
+            "map_list": "地图列表",
+            "stop_game": "暂停游戏",
+            "start_game": "开始游戏",
+			"enter_command":"键入指令",
+			"java_exe_path":"Java路径（exe）",
+			"server_jar_path":"服务器jar路径",
+			"apply":"确定",
+			"close":"关闭",
+			"windows_bg_color":"窗口背景色",
+			"terminal_bg_color":"终端背景色",
+			"terminal_font_color":"终端字体颜色",
+			"entry_color":"输入框颜色"
+			
+			
+        },
+        "en": {
+            "start_server": "start server",
+            "stop_server": "stop server",
+            "setting": "setting",
+            "map_list": "map list",
+            "stop_game": "stop game",
+            "start_game": "start game",
+			"enter_command":"enter command",
+			"java_exe_path":"java.exe path",
+			"server_jar_path":"server jar path",
+			"apply":"apply",
+			"close":"close",
+			"windows_bg_color":"windows background color",
+			"terminal_bg_color":"terminal background color",
+			"terminal_font_color":"terminal font color",
+			"entry_color":"input box color"
+			
+        }
+    }
+}, f)       
+            with open(LANGUAGE_PATH, "r", encoding="utf-8") as f:
+                return json.load(f)
+            
 
     def load_settings(self):
-        """加载设置，若文件不存在则返回默认配置"""
-        default_settings = {
-            "java": {"java_path": "", "jar_path": ""},
-            "color": {
-                "windows_bg": "#9e95f1",
-                "entry": "#9ec3f6",
-                "terminal": "#272f38",
-                "text": "#9ec3f6",
-                "top_frame_bg": "#9ec3f6"   # 补充缺失的键，避免 KeyError
-            }
-        }
-        if os.path.exists(SETTINGS_PATH):
-            try:
-                with open(SETTINGS_PATH, "r", encoding="utf-8") as f:
-                    return json.load(f)
-            except Exception as e:
-                print(f"加载 settings.json 失败: {e}，使用默认配置")
-        return default_settings
+        try:
+            with open(SETTINGS_PATH, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except:
+            with open(SETTINGS_PATH, "w", encoding="utf-8") as f:
+                json.dump({
+  "java": {
+    "java_path": "C:\\Apps\\coding\\Zulu\\bin\\java.exe",
+    "jar_path": "C:\\Users\\26529\\Documents\\MDT\\mdt_be.jar"
+  },
+  "color": {
+    "windows_bg": "#5dbcc8",
+    "entry": "#3d7980",
+    "terminal": "#549ea8",
+    "text": "#49254d"
+  }
+}, f)
+            with open(SETTINGS_PATH, "r", encoding="utf-8") as f:
+                return json.load(f)
+
 
     def save_settings(self):
         """保存设置到文件"""
